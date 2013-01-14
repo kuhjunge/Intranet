@@ -1,0 +1,11 @@
+2012-06-05
+ - Alternative Index.php für eigenes Design hinzugefügt
+2012-06-06
+ - änderungen am Supportool
+ 2012-07-05
+ - Passwortsystem geändert (alle PWs müssen neu erstellt werden, Salt System)
+ 2012-07-06
+ - Rechtesystem nun Gruppenbasiert [nicht voll implementiert]
+ToDo:
+ - Datenbank Struktur ändern
+ - Zugriffssystem in Schüler und Lehrer aufteilen

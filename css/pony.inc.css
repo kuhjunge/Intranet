@@ -1,0 +1,27 @@
+/* CSS Ergänzung für Animationen */
+ #header{
+	background:url(../art/header/pony.png) no-repeat top center;
+ }
+
+ @-webkit-keyframes move {
+  0%   { background-position: -500px 0; }
+  100% { background-position: 500px 0; }
+}
+
+ @-moz-keyframes move {
+  0%   { background-position: -500px 0; }
+  100% { background-position: 500px 0; }
+}
+ #movearea{
+    -webkit-animation-name: move;
+  	-webkit-animation-duration: 200s;
+ 	-webkit-animation-iteration-count: infinite;
+	-moz-animation-name: move;
+  	-moz-animation-duration: 200s;
+ 	-moz-animation-iteration-count: infinite;
+	width: 100%;
+	height: 466px; /* 650 px*/
+	display: block;
+	position: absolute;
+	background: url(../art/move.png) 500px 0 repeat-x;
+}

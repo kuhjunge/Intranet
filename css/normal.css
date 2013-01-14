@@ -1,0 +1,345 @@
+/* CSS: Webinterface */
+
+*{
+	margin: 0; /*padding: 0;*/
+	border: none; outline: none;
+	border-collapse: collapse;
+	border-spacing: 0;
+	text-decoration: none;
+}
+
+html, body {
+	line-height: 1;
+}
+
+body {
+/*	font-family: Arial, Helvetica, Verdana, sans-serif;
+	font-size: 16px;
+	color: #000;*/
+	font-family: "Segoe UI", Lucida Grande, Tahoma, sans-serif;
+	font-size: 16px;
+	color: #333;
+	background: #b2e5ff url(../art/clouds.png) repeat center center;
+}
+ 
+a {
+	text-decoration: none;
+	color:#67a5cd;
+}
+
+a:active{
+	color:#67a5cd;
+	text-shadow: 2px 2px 3px #aaa;
+} 
+
+img { 
+	vertical-align:bottom;
+	border: 0px solid #000;
+}
+
+ul {
+	margin:0;
+	padding-left:30px;
+}
+select{
+	border: 1px solid #eee;
+}
+
+input, textarea {
+	border-radius: 4px; 
+	box-shadow:
+		inset 0px 0px 1px rgba(0,0,0,0.4),
+		inset 0px 1px 4px rgba(0,0,0,0.4),
+		0px 1px white;
+	line-height: 1.5;
+}
+
+#wrap { }
+	
+#container {
+	/*	width: 1110px;   Hier kann die Weite eingestellt werden.	 */
+	width: 860px;
+	margin: 10px auto;
+	background-color: #ecf8ff; /* Fix für non CSS3 Browser */
+	/*border: 2px solid #000;*/
+	background: rgba(255,255,255,0.75);
+	border-radius: 8px; /* Runder Rahmen*/
+	box-shadow:
+		inset 0px 1px white,
+		0px 0px 1px rgba(0,0,0,0.25),
+		0px 2px 8px rgba(101,203,255,0.75);
+}
+
+ /* ----- Header ----- */
+	
+#header{
+	width: 860px;
+	display: block;
+	height: 300px;
+	background:url(../art/header/index.png) no-repeat top center;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	position: relative;
+	overflow: hidden;
+	/* border-bottom: 2px solid #fff;*/
+}
+	
+h1{
+	font: 48pt  Arial, sans-serif;
+	color: rgba(255,255,255,0.45);
+	font-weight:bold;
+	text-align: center;
+	padding: 4px 104px 0 0; /* Titelbild abziehen */
+	text-transform: uppercase;
+	/*color: transparent; */
+	text-shadow: 	rgba(245,245,255,0.4) 0 0px 0px,
+					rgba(0,0,0,0.2) 0px 6px 30px; 
+}
+
+p {
+padding: 2px 0 2px 0;
+}
+
+#logo {
+	margin: 30px;
+	float: right;
+}
+
+ /* ----- Nav ----- */ 
+
+#nav{
+	position: absolute;
+	float: left;
+	margin-top:18px;
+}
+
+ul.nav {
+	font-size: 20px;
+	list-style: none;
+	display: block;
+	width: 200px;
+	position: relative;
+	padding: 3px 0 3px 0;
+	-webkit-background-size: 50% 100%;
+	-moz-background-size: 50% 100%;
+}
+
+li {
+	margin: 5px 0 0 0;
+}
+
+ul.nav li a {
+	background-image: url(../art/white.png); 
+	color: #111;
+	-moz-transition: all 0.3s ease-out;
+	-webkit-transition: all 0.3s ease-out;
+	padding: 7px 15px 7px 15px;
+	border-top-right-radius: 10px;
+ 	border-bottom-right-radius: 10px;
+	width: 80px; /* Weite des Menus*/
+	display: block;
+	text-decoration: none;
+	text-shadow: none;
+	box-shadow: 1px 1px 3px #000;
+}
+
+ul.nav li a:hover {
+	color: #67a5cd;
+	padding: 7px 15px 7px 30px;
+}
+ /* ----- Content ----- */
+
+#content {
+	margin: 20px;
+	padding: 10px;
+	float:right;
+ 	position: relative; 
+	width: 600px;
+	min-height: 300px;
+	border-radius: 4px; 
+	box-shadow:
+		inset 0px 0px 1px rgba(0,0,0,0.2),
+		inset 0px 1px 4px rgba(0,0,0,0.2),
+		0px 1px white;
+	background: white url(../art/pinkieart.png) no-repeat right bottom;
+	}
+
+#sidebar {
+	width:200px;
+	float:left;
+}
+
+#sidebar h4 {
+	margin: 5px 0px;
+}
+
+.widget {
+	padding: 10px;
+}
+
+ /* ----- Footer ----- */
+ 
+#footer {
+	border-top: 1px dashed #000;
+	padding: 8px;
+	font-size: 10px;
+	height: auto;
+}
+
+/*html>body #footer {
+	height: auto;
+} */
+
+#footer p {
+	text-align: center;
+	padding-left: 184px;
+}
+
+#footer p img{
+	float:right;
+	margin: 0 12px 0 0px;
+}
+ /* ----- Sonstige Klassen ----- */
+ 
+.clear {
+	clear: both; 
+	overflow: hidden;
+	height: 0;
+	width: 0;
+}
+
+.right {
+	float:right;
+}
+
+.left {
+	float:left;
+	}
+.center {
+	text-align: center;
+	}
+	
+.leftdata {
+	width: 300px;
+	float:right;
+	margin-right: 150px;
+	padding: 0;
+	}
+
+.bordertop {
+	margin-top: 20px;
+	border-top: 1px solid #000;
+}
+
+form {
+	line-height: 1.5;
+}
+
+.login {
+	width: 90px;
+}
+
+th{
+	border:1px solid #777;
+	padding:10px;
+}
+
+td{
+	border:1px solid #aaa;
+	padding:10px;
+}
+.buttondiv {
+	float:left;
+	margin-right:8px;
+}
+
+.button {
+	text-align:center;
+	margin:5px;
+	line-height: 1.5;
+	width: 110px;
+	color: #000;
+	background-color: #ccc;
+	font-size: 12px;
+	padding:2px;
+	box-sizing: border-box;
+	border-radius: 4px; 
+	box-shadow: 0 0 3px 1px rgba(0,0,0,0.4);
+}
+
+.button:hover {
+	box-shadow: 0 0 3px 1px rgba(0,0,0,0.6)
+}
+
+.button:active {
+	box-shadow:
+		inset 0px 0px 4px rgba(0,0,0,0.2),
+		inset 0px 1px 1px rgba(0,0,0,0.2),
+		0px 1px white;
+}
+
+.infotext {
+	color:#000;
+	text-shadow: 2px 2px 3px #aaa;
+	text-align: center;
+}
+
+.fehler {
+	color: #ff0000; 
+	text-align: center;
+}
+/*--------- Ticket Management ----------*/
+.fett {
+font-weight: bold;
+}
+
+.schmal {
+	font-size: 10px;
+}
+
+.ticket_list {
+	padding: 5px;
+	border-radius: 4px; 
+	box-shadow: 0 0 3px 1px rgba(0,0,0,0.1);
+	border:1px solid #777;
+	background: #ccc;
+}
+.ticket_list2 {
+	padding: 5px;
+	border-radius: 4px; 
+	box-shadow: 0 0 3px 1px rgba(0,0,0,0.1);
+	border:1px solid #777;
+	background: #eee;
+}
+
+.ticket_listdetails {
+	overflow:hidden;
+	width:0;
+	height:0;
+	padding: 5px; 
+	margin: 0 10px 0 10px;
+	border-radius-bottom: 4px; 
+	border:1px solid #777;
+	border-top:0px solid #777;
+	background: #ddd;
+	visibility:hidden;
+}
+.ticket_wrap_active  > .ticket_listdetails {
+	overflow:hidden;
+	width:auto;
+	height:auto;
+	padding: 5px;
+	margin: 0 10px 5px; 10px;
+	border-radius-bottom: 4px; 
+	border:1px solid #777;
+	border-top:0px solid #777;
+	background: #ddd;
+	visibility:visible;
+}
+
+.ticket_prio {
+	padding-right: 5px;
+	float:left;
+}
+
+ /* ----- sonstiges ----- */ 

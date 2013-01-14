@@ -1,0 +1,30 @@
+/* CSS Ergänzung für Animationen */
+ #header{
+	background:url(../art/header/login.png) no-repeat top center;
+ }
+
+ #content {
+	margin: 20px 300px 0 0;
+	padding: 10px;
+	float:right;
+ 	position: relative; 
+	width: 200px;
+	min-height: 20px;
+	background: white;
+	box-shadow:
+		inset 0px 0px 1px rgba(0,0,0,0.2),
+		inset 0px 1px 4px rgba(0,0,0,0.2),
+		0px 1px white;
+	text-align: center;
+	border: 2px solid #000;
+	border-radius: 32px; /* Runder Rahmen*/
+	}
+	
+#content div{ /*Login Box*/
+	margin-top:10px;
+	padding: 10px;
+		/* Jetzt wird sie zentriert. */
+	
+	/* Jetzt steht die linke obere Ecke genau am Mittelpunkt. Noch. */
+
+}

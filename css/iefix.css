@@ -1,0 +1,28 @@
+#container {
+	border:1px #ccc solid;
+}
+
+#content {
+	border:1px #ccc solid;
+	margin: 18px;
+}
+
+input, textarea {
+	border:1px #ccc solid;
+	line-height: 1.5;
+}
+
+.button:hover {
+	border:1px #999 solid;
+}
+
+ul.nav {
+
+}
+
+ul.nav li a {
+	background-color: #fff;
+	border-top:1px #999 solid;
+	border-right:1px #999 solid;
+	border-bottom:1px #999 solid;
+}
