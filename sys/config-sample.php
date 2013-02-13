@@ -1,11 +1,11 @@
-<?php
+﻿<?php
 // Allgemeine Einstellungen
 define("DEBUG",     false); // DEBUG Modus
 define("FEHLER",     true); // Fehler Anzeigen Modus
 // MySQL Verbindungen
 define("MYSQLSERVER",     'localhost'); // MySQL Server
 define("MYSQLUSER",     'root'); // MySQL User
-define("MYSQLPW",     '55431'); // MySQL Passwort
+define("MYSQLPW",     ''); // MySQL Passwort
 define("MYSQLDB",     'intranet'); // MySQL Passwort
 // User Management
 define("USEMYSQL",     true); // Nutze MySQL Datenbank
