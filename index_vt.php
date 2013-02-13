@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 // VT Testseite - V.0.1
 require('sys/config.php'); //Einstellungen
 if (FEHLER) error_reporting(E_ALL);

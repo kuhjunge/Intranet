@@ -12,7 +12,7 @@ if (isset($_GET["id"]))
 		$id = $_GET["id"];
 	}
 }
-/* FÃ¼r GrundfunktionalitÃ¤t benÃ¶tigte Includes einbinden */
+/* Für Grundfunktionalität benötigte Includes einbinden */
 require('sys/dbcon.php'); //Datenbankeinbindung
 $db = new Datenbank;
 include('sys/functions.php'); //Functions
