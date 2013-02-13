@@ -295,11 +295,19 @@ Class User
 	// -- Datenbank Kommunikation --
 	/*
 	- userlist() : Gesammtliste aller Nutzer
-	- delete($regname) : User l�schen
+	- delete($regname) : User löschen
 	- createUser($name, $npw, $npw2) : User erstellen
+	- grouplist() : Listet alle Gruppen auf
+	- rightlist() : Listet alle Rechte auf
+	- showright($gruppe) : Listet alle Rechte einer Gruppe auf
+	- loadgroup() : Läd die Gruppen des Nutzers
+	- getRightbyID($id) : Läd die Rechte eines Nutzers
+	- checkPerm($r,$byname = false) : Prüft auf ein Recht
+	- delgrpcon($grp,$recht) : Löscht Gruppe Recht Verbindung
+	- creategrpcon($grp,$recht) : Erstellt Gruppe Recht Verbindung
 	~ askdb("all",$name) : Nutzerdaten aus DB lesen
 	~ wrtdb($upt=true)
-	- installdb : Richtet die Datenbank f�r die erste Verwendung ein
+	- installdb : Richtet die Datenbank für die erste Verwendung ein
 	*/
 	function userList()
 	{ // Aus Original entnommen und angepasst
@@ -328,7 +336,7 @@ Class User
 	
 	function delete()
 	{ // Aus Original entnommen und angepasst
-		if ($this->getEdit() == 2 && $this->mysqldb) // Nur Admins d�rfen L�schen
+		if ($this->getEdit() == 2 && $this->mysqldb) // Nur Admins dürfen Löschen
 		{
 			$dbu = $this->dbu;
 			$dbu->delete("username",$this->getName(),$this->db);
@@ -349,6 +357,158 @@ Class User
 			else $this->dbchange = false; 
 		}
 		return $erg;
+	}
+	
+	function grouplist()
+	{
+		if ($this->debug) echo '<br />Debug: Gruppen auflisten';
+		if ($this->mysqldb)
+		{
+			$i = 0;
+			$dbu = $this->dbu;
+			$ergebnis = $dbu->q("SELECT id, gruppe,rechtebeschreibung FROM `".$this->mysqldbname."`.`gruppe`");
+			while($row = mysql_fetch_object($ergebnis))
+			{
+				$erg[$i]['name'] = $row->gruppe;
+				$erg[$i]['id'] = $row->id;
+				$erg[$i]['beschr'] = $row->rechtebeschreibung;
+				$i++;
+			}
+		}
+		return $erg;
+	}
+	
+	function rightlist()
+	{
+		if ($this->debug) echo '<br />Debug: Rechte auflisten';
+		if ($this->mysqldb)
+		{
+			$i = 1;
+			$dbu = $this->dbu;
+			$ergebnis = $dbu->q("SELECT id, rechtname, rechtbeschreibung FROM `".$this->mysqldbname."`.`rechte`");
+			while($row = mysql_fetch_object($ergebnis))
+			{
+				$erg[$i]['name'] = $row->rechtname;
+				$erg[$i]['beschr'] = $row->rechtbeschreibung;
+				$erg[$i]['id'] = $row->id;
+				$i++;
+			}
+		}
+		return $erg;
+	}
+	
+	function showright($grp)
+	{
+		if ($this->debug) echo '<br />Debug: R&G Auflistung';
+		if ($this->mysqldb)
+		{
+			$dbu = $this->dbu;
+			$q = $dbu->q("SELECT * FROM `".$this->mysqldbname."`.`gruppe` WHERE `id` = '".$grp."';");
+			if (!empty($q))
+			{	
+				$row = mysql_fetch_row($q);
+			}
+			$erg[0] = $row;
+			$ii = 0;
+			$recht =""; // Deklaration
+			$ergebnis2 = $dbu->q("SELECT * FROM `".$this->mysqldbname."`.`gruppe_rechte` WHERE `gruppe` = ".$grp);
+			while($row2 = mysql_fetch_object($ergebnis2))
+			{
+				$recht[$ii] = $row2->recht;
+				$ii++;
+			}
+			$erg[1] = $recht;
+			$ii= 0 ;
+			if (empty($recht)) $recht= Array(0,0);
+			$unrecht =""; // Deklaration
+			$ergebnis = $dbu->q("SELECT * FROM `".$this->mysqldbname."`.`gruppe_rechte` WHERE NOT `gruppe` = ".$grp);
+			while($row = mysql_fetch_object($ergebnis))
+			{
+				$schondrin = false;
+				if (!empty($unrecht)){ if (in_array($row->recht, $unrecht)) $schondrin = true;}
+				if(!in_array($row->recht, $recht) && !$schondrin)
+				{
+					$unrecht[$ii] = $row->recht;
+					$ii++;
+				}
+			}
+			$erg[2] = $unrecht;
+		}
+		return $erg;
+	}
+	
+	function loadgroup()
+	{
+		if ($this->debug) echo '<br />Debug: Gruppenberechtigungen laden #'.$this->user['grp'];
+		if ($this->mysqldb)
+		{
+			$dbu = $this->dbu;
+		/*	$i = 0;
+			$ergebnis = $dbu->q("SELECT id, gruppe FROM `".$this->mysqldbname."`.`gruppe`");
+			while($row = mysql_fetch_object($ergebnis))
+			{
+				$grpid[$i] = $row->id;
+				if (in_array($grpid[$i], $this->group))
+				{ 
+					$grpn[$i] = $row->gruppe;*/
+					$ii = 0;
+					$ergebnis2 = $dbu->q("SELECT * FROM `".$this->mysqldbname."`.`gruppe_rechte` WHERE `gruppe` = ".$this->user['grp']);
+					
+					while($row2 = mysql_fetch_object($ergebnis2))
+					{
+						$this->recht[$ii] = $row2->recht;
+						if ($this->debug) echo ' -> '.$this->recht[$ii];
+						$ii++;
+					}
+			/*	} 
+				$i++;
+			} */
+		}
+	}
+	
+	function getRightbyID($id) {
+		if ($this->debug) echo '<br />Debug: Namen in ID aufl򳥮';
+		$dbu = $this->dbu;
+		$row= $dbu->q("SELECT rechtname FROM `".$this->mysqldbname."`.`rechte` WHERE `id` = ".$id);
+		$ergebnis = mysql_fetch_row($row);
+		return $ergebnis;
+	}
+	
+	function checkPerm($r,$byname = false) {
+		if ($this->debug) echo '<br />Debug: Checkperm: ';
+		if ($byname)
+		{
+			$dbu = $this->dbu;
+			$row= $dbu->q("SELECT id FROM `".$this->mysqldbname."`.`rechte` WHERE `rechtname` = ".$r);
+			$erg = mysql_fetch_row($row);
+		}
+		else $erg = $r;
+		$ergebnis = in_array($erg, $this->recht);
+		if ($this->adminmode) $ergebnis = in_array(4, $this->recht); // Admincheck, Admins d𲦥n alles
+		if ($this->debug) echo " -  ".$erg." -  ".$ergebnis;
+		
+		return  $ergebnis;
+	}
+	
+	function delgrpcon($grp,$recht)
+	{
+		if ($this->debug) echo '<br />Debug: Lösche Gruppe - Recht Verknüpfung';
+		if ($this->mysqldb && $this->checkPerm(3))
+		{
+			$dbu = $this->dbu;
+			$dbu->q("DELETE FROM `".MYSQLDB."`.`gruppe_rechte`  WHERE `gruppe_rechte`.`gruppe` = ".$grp." AND `gruppe_rechte`.`recht` = ".$recht.";");
+		}
+	}
+	
+	function creategrpcon($grp,$recht)
+	{
+		if ($this->debug) echo '<br />Debug: Erstelle Gruppe - Recht Verknüpfung';
+				if ($this->mysqldb && $this->checkPerm(3))
+		{
+			$dbu = $this->dbu;
+			$dbu->q("INSERT INTO `".MYSQLDB."`.`gruppe_rechte`  (`gruppe`, `recht`) VALUES ('".$grp."', '".$recht."');");
+		}
+		//		INSERT INTO `intranet`.`gruppe_rechte` (`gruppe`, `recht`) VALUES ('4', '4');
 	}
 	
 	private function askdb($q, $name)
@@ -544,130 +704,9 @@ Class User
 	// -- Dev Funktionene --
 	/*
 
+	
 	*/
 	
-	function grouplist()
-	{
-		if ($this->debug) echo '<br />Debug: Gruppen auflisten';
-		if ($this->mysqldb)
-		{
-			$i = 0;
-			$dbu = $this->dbu;
-			$ergebnis = $dbu->q("SELECT id, gruppe,rechtebeschreibung FROM `".$this->mysqldbname."`.`gruppe`");
-			while($row = mysql_fetch_object($ergebnis))
-			{
-				$erg[$i]['name'] = $row->gruppe;
-				$erg[$i]['id'] = $row->id;
-				$erg[$i]['beschr'] = $row->rechtebeschreibung;
-				$i++;
-			}
-		}
-		return $erg;
-	}
-	
-	function rightlist()
-	{
-		if ($this->debug) echo '<br />Debug: Rechte auflisten';
-		if ($this->mysqldb)
-		{
-			$i = 1;
-			$dbu = $this->dbu;
-			$ergebnis = $dbu->q("SELECT id, rechtname, rechtbeschreibung FROM `".$this->mysqldbname."`.`rechte`");
-			while($row = mysql_fetch_object($ergebnis))
-			{
-				$erg[$i]['name'] = $row->rechtname;
-				$erg[$i]['beschr'] = $row->rechtbeschreibung;
-				$erg[$i]['id'] = $row->id;
-				$i++;
-			}
-		}
-		return $erg;
-	}
-	
-	function showright($grp)
-	{
-		if ($this->debug) echo '<br />Debug: R&G Auflistung';
-		if ($this->mysqldb)
-		{
-			$recht =""; // Deklaration
-			$dbu = $this->dbu;
-			$q = $dbu->q("SELECT * FROM `".$this->mysqldbname."`.`gruppe` WHERE `id` = '".$grp."';");
-			if (!empty($q))
-			{	
-				$row = mysql_fetch_row($q);
-			}
-			$erg[0] = $row;
-			$ii = 0;
-			$ergebnis2 = $dbu->q("SELECT * FROM `".$this->mysqldbname."`.`gruppe_rechte` WHERE `gruppe` = ".$grp);
-			while($row2 = mysql_fetch_object($ergebnis2))
-			{
-				$recht[$ii] = $row2->recht;
-				$ii++;
-			}
-			$erg[1] = $recht;
-			$ii= 0 ;
-			$ergebnis2 = $dbu->q("SELECT * FROM `".$this->mysqldbname."`.`gruppe_rechte` WHERE NOT `gruppe` = ".$grp);
-			while($row2 = mysql_fetch_object($ergebnis2))
-			{
-				$unrecht[$ii] = $row2->recht;
-				$ii++;
-			}
-			$erg[2] = $unrecht;
-		}
-		return $erg;
-	}
-	
-	function loadgroup()
-	{
-		if ($this->debug) echo '<br />Debug: Gruppenberechtigungen laden #'.$this->user['grp'];
-		if ($this->mysqldb)
-		{
-			$dbu = $this->dbu;
-		/*	$i = 0;
-			$ergebnis = $dbu->q("SELECT id, gruppe FROM `".$this->mysqldbname."`.`gruppe`");
-			while($row = mysql_fetch_object($ergebnis))
-			{
-				$grpid[$i] = $row->id;
-				if (in_array($grpid[$i], $this->group))
-				{ 
-					$grpn[$i] = $row->gruppe;*/
-					$ii = 0;
-					$ergebnis2 = $dbu->q("SELECT * FROM `".$this->mysqldbname."`.`gruppe_rechte` WHERE `gruppe` = ".$this->user['grp']);
-					
-					while($row2 = mysql_fetch_object($ergebnis2))
-					{
-						$this->recht[$ii] = $row2->recht;
-						if ($this->debug) echo ' -> '.$this->recht[$ii];
-						$ii++;
-					}
-			/*	} 
-				$i++;
-			} */
-		}
-	}
-	
-	function getRightbyID($id) {
-		if ($this->debug) echo '<br />Debug: Namen in ID aufl�sen';
-		$dbu = $this->dbu;
-		$row= $dbu->q("SELECT rechtname FROM `".$this->mysqldbname."`.`rechte` WHERE `id` = ".$id);
-		$ergebnis = mysql_fetch_row($row);
-		return $ergebnis;
-	}
-	
-	function checkPerm($r,$byname = false) {
-		if ($this->debug) echo '<br />Debug: Checkperm: ';
-		if ($byname)
-		{
-			$dbu = $this->dbu;
-			$row= $dbu->q("SELECT id FROM `".$this->mysqldbname."`.`rechte` WHERE `rechtname` = ".$r);
-			$erg = mysql_fetch_row($row);
-		}
-		else $erg = $r;
-		$ergebnis = in_array($erg, $this->recht);
-		if ($this->adminmode) $ergebnis = in_array(4, $this->recht); // Admincheck, Admins d�rfen alles
-		if ($this->debug) echo " -  ".$erg." -  ".$ergebnis;
-		
-		return  $ergebnis;
-	}
+
 }
 ?>

@@ -8,9 +8,7 @@ if (isset($_GET['name']))
 	$rname = $_GET['name'];
 	$user_c->loadbyname($rname, $user);
 	$url = "&name=$rname";
-}
-?>
-	<h2>Benutzerverwaltung</h2><br />
+} ?><h2>Benutzerverwaltung</h2><br />
 	<?php
 	if (isset($_GET['edit'])) // Bearbeitungsmodus
 	{
@@ -37,8 +35,16 @@ if (isset($_GET['name']))
 					<p>Neues Passwort: <input class="leftdata" name="neupasswort" type=password maxlength="20" /></p>
 					<p>Wiederholen: <input class="leftdata" name="neupasswort2" type=password maxlength="20" /></p>
 					<?php if ($user_c->getEdit() > 1){ ?>
-					<br /><p>Recht: <input class="leftdata" name="right" type=text maxlength="1" value="<?php echo $user_c->getGrp(); ?>"/></p>
-					<?php } ?>
+					<p>Gruppe: <select name="grp" class="leftdata" size="1"><?php 		
+						$group = $user_c->grouplist();
+						for($i = 0;$i < count($group);$i++)
+						{
+							$check = "";
+							if ($user_c->getGrp() == $group[$i]['id']){
+							$check = 'selected="selected"';}
+							echo '<option value="'.$group[$i]['id'].'"'.$check.">".$group[$i]['name']."</option><br />";
+						} 
+					}?></select>
 				</div>
 
 				<div class="clear" > </div> <!-- bricht div Container Verschachtelung auf -->
@@ -86,11 +92,14 @@ if (isset($_GET['name']))
 			<div class="left" style="padding-right: 15px;">
 			Name: <br />
 			Mail: <br />
+			Gruppe: <br />
 			Bio:  <br />
 		</div>
 		<div>
 			<?php echo $user_c->getName(); ?><br />
 			<a href="mailto:<?php echo $user_c->getMail(); ?>" ><?php echo $user_c->getMail(); ?></a><br />
+			<?php $grp = $user->showright($user_c->getgrp());
+					echo $grp[0][1]; ?><br />
 			<?php echo $user_c->getBio(); ?><br />
 		</div>
 			<?php if ($user_c->getEdit() > 0) { ?>
@@ -112,7 +121,7 @@ if (isset($_GET['name']))
 			}
 		}
 	}
-	else if (isset($_GET['group'])) // Wenn Nutzerprofil aufgerufen wird
+	else if (isset($_GET['group'])) // Wenn Gruppe aufgerufen wird
 	{
 		$grpid = $_GET['group'];
 		$grp = $user->showright($grpid);
@@ -123,19 +132,27 @@ if (isset($_GET['name']))
 		if (!empty($temp))
 		foreach($temp as $gruppe) echo "<li>".$right[$gruppe]['name']."</li>";
 		echo '</ul>
-		Recht hinzuf&uuml;gen: <select name="hauptstadt" size="1">';
+		<form method="post" action="index.php?id=update">
+		Recht hinzuf&uuml;gen: <select name="addright" size="1">';
 		for($i = 0;$i < count($grp[2]);$i++)
 		{
 			echo "<option>".$right[$grp[2][$i]]['name']."</option>";
 		}
-		echo '</select><br />	
-		Recht entfernen: <select name="hauptstadt" size="1">';
+		echo '</select> 		
+			<input type="hidden" name="grp" value="'.$grpid.'" > 
+			<input class="button" type=submit name=edit value="Hinzufügen">
+		</form>
+		<form method="post" action="index.php?id=update">
+		Recht entfernen: <select name="delright" size="1">';
 		for($i = 0;$i < count($grp[1]);$i++)
 		{
 			echo "<option>".$right[$grp[1][$i]]['name']."</option>";
 		}
-		echo '</select>';
-		zarr($grp);
+		echo '</select>
+			<input type="hidden" name="grp" value="'.$grpid.'" > 
+			<input class="button" type=submit name=edit value="Entfernen">
+		</form>';
+		// zarr($grp);
 	}	
 	else // Allgemeine Nutzerverwaltungsseite
 	{
