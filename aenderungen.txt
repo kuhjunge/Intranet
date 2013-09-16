@@ -9,3 +9,4 @@
 ToDo:
  - Datenbank Struktur ändern
  - Zugriffssystem in Schüler und Lehrer aufteilen
+ - Bug: Anlegen eines neuen Benutzers und fehlerhafte Passwortabfrage führen zu Error

@@ -8,7 +8,7 @@ if (isset($_GET['name']))
 	$rname = $_GET['name'];
 	$user_c->loadbyname($rname, $user);
 	$url = "&name=$rname";
-} ?><h2>Benutzerverwaltung</h2><br />
+} ?><h2><a href="index.php?id=user" title="Nutzerverwaltung">Nutzerverwaltung</a></h2><br />
 	<?php
 	if (isset($_GET['edit'])) // Bearbeitungsmodus
 	{

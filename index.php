@@ -32,10 +32,7 @@ echo zarr(getBrowser())."<br />";
 }
 // Gucken ob Login vorhanden - Wenn nicht dann standard
 $user = new User;
-if (!isset($_SESSION['login']))
-{
-	$_SESSION['login'] = "";
-}
+if (!isset($_SESSION['login'])){$_SESSION['login'] = "";}
 // zarr($_SESSION); ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="de-DE">
@@ -88,7 +85,8 @@ if (!isset($_SESSION['login']))
 					</div><!-- sidebar -->
 					<div class="clear" > </div> <!-- bricht div Container Verschachtelung auf -->					
 				</div><!-- main -->
-				<?php if ($db->getstate() != 'online') echo '<div class="fehler"> Die Datenbank konnte nicht verbunden werden.</div>'; ?>
+				<?php if (isset($_GET["message"]))echo '<div class="fehler">'.$_GET["message"].'</div>'; ?>
+				<?php if (!$db->getstate()) echo '<div class="fehler"> Die Datenbank konnte nicht verbunden werden.</div>'; ?>
 				<div id="footer">
 					<p>
 					<a href="#" title="Valid CSS"><img  title="Valid CSS" src="art/w3s.gif" alt="Valid CSS" width="80" height="15" /></a>

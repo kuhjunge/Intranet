@@ -5,9 +5,8 @@ Class Datenbank
 	private $db_user = 			MYSQLUSER;
 	private $db_password = 		MYSQLPW;
 	private $db_database = 		MYSQLDB;
-	private $db_state = 		'online';
+	private $db_online = 		true;
 	
-	private $debug = FEHLER;
 	// ----- Constructor = Wird bei jedem aufruf als erstes ausgeführt -----
 	function __construct($dbname=MYSQLDB) 
 	{
@@ -15,20 +14,22 @@ Class Datenbank
 	  if (@mysql_connect($this->db_server, $this->db_user, $this->db_password) != true) // Fehler ausgeblendet
 	  {
 		$sql = "use $this->db_database"; // Datenbank auswählen
-		if ($this->debug) $result = mysql_query($sql);
+		if (FEHLER) "Datenbankfehler: ".$result = mysql_query($sql);
 		else @$result = mysql_query($sql); // Fehler ausgeblendet
 		if (!$result)
 		{
 			//  die ('Fehler Datenbankauswahl: ' . mysql_error());
-			$this->db_state = 'DB Offline';
-			if ($this->debug) echo 'Fehler Datenbankauswahl: ' . mysql_error().'<br />';
+			$this->db_online = false;
+			if (FEHLER) echo 'Fehler Datenbankauswahl: ' . mysql_error().'<br />';
 		}
 	  }
 	}
 	
 	function getstate()
 	{
-		return $this->db_state;
+		if ($this->db_online)
+			return  true;
+		else return false;
 	}
 	
 	// ----- Datenbank, get und set -----
@@ -90,24 +91,23 @@ Class Datenbank
 		$this->q("DELETE FROM `$this->db_database`.`$db` WHERE $id='$idcontent';");
 	}
 	
-	function q($q)
+	function q($q) // Führt Datenbankabfragen aus
 	{
-		if ($this->db_state == 'DB Offline') $qerg = ""; // Wenn DB offline
-		else if ($this->debug)
+		if ($this->db_online == false) $qerg = ""; // Wenn DB offline
+		else if (FEHLER) // Fehler wird angezeigt
 		{ 
 			$qerg = mysql_query($q);
 			if (!$qerg) 
 			{
 				echo "MySQL Error: ".mysql_error()."<br>";
 			}
-		if (DEBUG)	 echo '<br /> QUERY: '.$q; // Query ausgeben 
+			if (DEBUG)	 echo '<br /> QUERY: '.$q; // Query ausgeben 
 		}
-		else
+		else // Fehler wird vertuscht
 		{
 			@$qerg = mysql_query($q);
 			if (!$qerg)
 			{
-				$this->db_state = 'Fehlerhafte DB-Abfrage';
 				$qerg = "";
 			}
 		}

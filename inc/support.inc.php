@@ -23,8 +23,8 @@ $status = "";
 $dbname = MYSQLDB;
 
 // Ticket anzeigen und bearbeiten
-if ($site == "ticket") {
-
+if ($site == "ticket") 
+{
 	// Datenbank auslesen
 	if (isset($_GET['inid']) || isset($_POST['inid']))
 	{
@@ -78,14 +78,13 @@ if ($site == "ticket") {
 			$db->q("UPDATE  `$dbname`.`incident` SET `name` ='".$name."',`ort` = '".$ort."' ,`kontakt` ='".$kontakt."',`hardware` = '".$hardware."',`prio` ='".$prio."' ,`titel` ='".$titel."',`beschreibung`= '".$beschreibung."' ,`loesung` = '".$loesung."',`bearbeiter`= '".$bearbeiter."' ,`status` = '".$status."' WHERE `id`=$id;");
 			if ($status == 3) Header("Location: index.php?id=support&site=liste");
 		}
-		$erf = true;
-		
+		$erf = true;	
 	}
 // Eigentliche Website
 ?>
 		<h2>Supportcenter - Ticketbearbeitung</h2>
 		<form method="post" action="index.php?id=support&site=ticket"  enctype="multipart/form-data">
-		<input type="hidden" name="inid" value="<?php echo $id ?>" />
+		<input type="hidden" name="inid" value="<?php echo $id; ?>" />
 		<input type="hidden" name="user" value="<?php echo $user->getName();?>" />
 		
 		Name: <input type="text" name="name" value="<?php echo $name; ?>" /><br />
@@ -104,7 +103,8 @@ if ($site == "ticket") {
 					else echo "$loesung<input type='hidden' name='loesung' value='$loesung' />" ;
 				if ($name == "") $typ = "eröffnen";
 				else $typ  = "speichern" ;
-		if ($recht > 4  || $typ == "eröffnen")   {?>
+		if ($recht > 4  || $typ == "eröffnen")   
+		{ ?>
 			<br />
 			<input class="button" type="submit" name="best" value="<?php echo $typ ;?>" />
 			<?php if ($typ != "eröffnen") echo '<input class="button" type="submit" name="best" value="abschließen" />';
@@ -112,12 +112,13 @@ if ($site == "ticket") {
 			if (isset($erf)) echo '<div>Eintrag erfolgreich!</div>';
 		}
 	}
-		// --- Liste aller Supporttickets anzeigen ---
-	else { // if ($site == "liste"){ 
+	// --- Liste aller Supporttickets anzeigen ---
+else 
+{  
 		$li_filter = "offen";
-		if(isset($_GET['filter'])) $li_filter = $_GET['filter'];?>
+		if(isset($_GET['filter'])) { $li_filter = $_GET['filter']; } ?>
 		<h2>Supportcenter - Ticketliste</h2><div><br />
-		<? if ($recht > 4) { // Klammert Filterfunktion für Normaluser aus?>
+		<?php if ($recht>4){// Klammert Filterfunktion für Normaluser aus ?>
 		<form method="get" action="index.php">
 		 <input type="hidden" name="id" value="support" />
 		 <input type="hidden" name="site" value="liste" />
@@ -136,53 +137,52 @@ if ($site == "ticket") {
 		else if ($li_filter == "meine") $a = $db->q("SELECT * FROM `$dbname`.`incident` WHERE `bearbeiter` = '".$user->getName()."' ORDER BY `status`,`prio`");
 		else $a = $db->q("SELECT * FROM `$dbname`.`incident` ORDER BY `status`,`prio`");
 		
-			while($array = mysql_fetch_assoc($a)){ // solange nicht nur eine zeile als ergebnis garantiert ist
-				$li_titel = $array['titel'];
-				$li_id = $array['id'];
-				$li_prio= $array['prio'];
-				$li_status = $array['status'];
-				$li_name = $array['name'];
-				$li_ort = $array['ort'];
-				$li_kontakt = $array['kontakt'];
-				$li_hardware = $array['hardware'];
-				$li_beschreibung = $array['beschreibung'];
-				$li_bearbeiter = $array['bearbeiter'];
-				$li_ersteller = $array['ersteller'];
-				$li_createdate = $array['createdate'];
-				// Bearbeitung
-				$i++; // Zähler einen weiter
-				// -> Prio
-				$li_prio_text="unwichtig";
-				if ($li_prio == 1) $li_prio_text="sehr wichtig";
-				else if ($li_prio == 2) $li_prio_text="wichtig";
-				else if ($li_prio == 3) $li_prio_text="normal";
-				// -> Status
-				$li_status_text = "abgeschlossen";
-				if ($li_status == 1) $li_status_text="aufgenommen";
-				else if ($li_status == 2) $li_status_text="in Bearbeitung";
-				// -> Farbe
-				if($i % 2 == 0) $list_aussehen = "2";
-				else $list_aussehen = "";
-				// Ausgabe
-				echo "
-				<div class='ticket_wrap'>
-					<div class='ticket_list$list_aussehen'>
-						<div class='ticket_prio'>$li_prio_text </div> <div class='right'> $li_status_text</div> <div><span class='fett'> <a href='index.php?id=support&site=ticket&inid=$li_id'> $li_titel </a></span> </div>
-					</div>
-					<div class='ticket_listdetails'><span class='fett'>Name:</span> $li_name <br /> <span class='fett'>Ort:</span>  $li_ort  <span class='fett'>Kontakt:</span>  $li_kontakt  <span class='fett'>Computer:</span>  $li_hardware <br/>
-					<br /><span class='fett'>Beschreibung:</span>  $li_beschreibung
-					<br />
-					<span class='schmal'>von <a href='index.php?id=user&name=$li_ersteller '>$li_ersteller</a> am $li_createdate	erstellt - aktueller Bearbeiter: <a href='index.php?id=user&name=$li_bearbeiter'>$li_bearbeiter</a></span></div>
-				</div>";
-			}
-			echo '<script>
-				$(".ticket_wrap").click(function() {
-					$(this).toggleClass("ticket_wrap_active");
-				});
-				</script>';
+		while($array = mysql_fetch_assoc($a)){ // solange nicht nur eine zeile als ergebnis garantiert ist
+			$li_titel = $array['titel'];
+			$li_id = $array['id'];
+			$li_prio= $array['prio'];
+			$li_status = $array['status'];
+			$li_name = $array['name'];
+			$li_ort = $array['ort'];
+			$li_kontakt = $array['kontakt'];
+			$li_hardware = $array['hardware'];
+			$li_beschreibung = $array['beschreibung'];
+			$li_bearbeiter = $array['bearbeiter'];
+			$li_ersteller = $array['ersteller'];
+			$li_createdate = $array['createdate'];
+			// Bearbeitung
+			$i++; // Zähler einen weiter
+			// -> Prio
+			$li_prio_text="unwichtig";
+			if ($li_prio == 1) $li_prio_text="sehr wichtig";
+			else if ($li_prio == 2) $li_prio_text="wichtig";
+			else if ($li_prio == 3) $li_prio_text="normal";
+			// -> Status
+			$li_status_text = "abgeschlossen";
+			if ($li_status == 1) $li_status_text="aufgenommen";
+			else if ($li_status == 2) $li_status_text="in Bearbeitung";
+			// -> Farbe
+			if($i % 2 == 0) $list_aussehen = "2";
+			else $list_aussehen = "";
+			// Ausgabe
+			echo "
+			<div class='ticket_wrap'>
+				<div class='ticket_list$list_aussehen'>
+					<div class='ticket_prio'>$li_prio_text </div> <div class='right'> $li_status_text</div> <div><span class='fett'> <a href='index.php?id=support&site=ticket&inid=$li_id'> $li_titel </a></span> </div>
+				</div>
+				<div class='ticket_listdetails'><span class='fett'>Name:</span> $li_name <br /> <span class='fett'>Ort:</span>  $li_ort  <span class='fett'>Kontakt:</span>  $li_kontakt  <span class='fett'>Computer:</span>  $li_hardware <br/>
+				<br /><span class='fett'>Beschreibung:</span>  $li_beschreibung
+				<br />
+				<span class='schmal'>von <a href='index.php?id=user&name=$li_ersteller '>$li_ersteller</a> am $li_createdate	erstellt - aktueller Bearbeiter: <a href='index.php?id=user&name=$li_bearbeiter'>$li_bearbeiter</a></span></div>
+			</div>";
+		}
+		echo '<script>
+			$(".ticket_wrap").click(function() {
+				$(this).toggleClass("ticket_wrap_active");
+			});
+			</script>';
 		echo "<br />Insgesammt $i Tickets!</div>";
-
-} // --- Supportcenter übersicht ---
-
+}
+ // --- Supportcenter übersicht ---
 ?> 
 <div><br /><a href="index.php?id=support&site=liste">Übersicht</a> | <a href="index.php?id=support&site=ticket">Ticket (neu)</a></div>

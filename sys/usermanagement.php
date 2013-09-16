@@ -655,7 +655,7 @@ Class User
 				`iwas` INT( 1 ) NULL 
 				) ENGINE = InnoDB;");
 			// Die Standartnutzer
-			$dbu->q("INSERT INTO `$datenbank`.`user` (`username`, `name`, `email`, `bio`, `password`, `createdate`, `lastlogin`, `loginactive`, `grp`, `note`, `iwas`) VALUES ('Kuhjunge', 'Chris Deter', 'quhberta@googlemail.com', 'Ich bin total kuhl!', '".$this->pwhash('55431')."', CURRENT_TIMESTAMP, NOW(), '1', '3', 'Admin', NULL);"); 
+			$dbu->q("INSERT INTO `$datenbank`.`user` (`username`, `name`, `email`, `bio`, `password`, `createdate`, `lastlogin`, `loginactive`, `grp`, `note`, `iwas`) VALUES ('Kuhjunge', 'Chris Deter', 'chrisdash@posteo.de', 'Ich bin total kuhl!', '".$this->pwhash('55431')."', CURRENT_TIMESTAMP, NOW(), '1', '3', 'Admin', NULL);"); 
 		$npass = $this->pwhash($pw);
 			$dbu->q("INSERT INTO `$datenbank`.`user` (`username`, `name`, `email`, `bio`, `password`, `createdate`, `lastlogin`, `loginactive`, `grp`, `note`, `iwas`) VALUES ('$name', 'Administrator', '', '', '$npass', CURRENT_TIMESTAMP, NOW(), '1', '3', 'Admin', NULL);"); // pw: Admin
 			// Gruppentabelle wird erstellt

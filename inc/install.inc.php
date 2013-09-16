@@ -10,7 +10,7 @@
 			{
 				$user->installdb($_POST["user"],$_POST["neupasswort"]);
 			}
-			Header("Location: index.php");
+			Header("Location: index.php?message=Datenbank Installation komplett!");
 		}
 ?>
 <h2>Installation</h2>
