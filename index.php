@@ -1,5 +1,11 @@
 <?php
-require('sys/config.php'); //Einstellungen
+$config='sys/config.php'; // Config Pfad
+if (!file_exists($config) && !is_readable($config)) // Test ob Config vorhanden ist
+{ //Einstellungen
+ 	echo "<h1>Fehler! Keine Konfigurationsdatei gefunden. Bitte einrichten!<h1>"; 
+	exit; 
+}
+require($config); // Configfile einlesen
 if (FEHLER) error_reporting(E_ALL);
 else error_reporting(0);
 
